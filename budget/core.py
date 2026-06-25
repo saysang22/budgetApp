@@ -1,0 +1,39 @@
+"""Core logic for the budget CLI app."""
+
+from __future__ import annotations
+
+from collections.abc import MutableSequence
+from typing import Any
+
+
+def add_transaction(
+    transactions: MutableSequence[dict[str, Any]],
+    transaction: dict[str, Any],
+) -> None:
+    """Add a transaction to the collection."""
+    pass
+
+
+def get_balance(transactions: list[dict[str, Any]]) -> float:
+    """Return the net balance for all transactions."""
+    pass
+
+
+def filter_by_category(
+    transactions: list[dict[str, Any]],
+    category: str,
+) -> list[dict[str, Any]]:
+    """Return transactions that match the given category."""
+    pass
+
+
+def load_transactions_from_csv(path: str) -> list[dict[str, Any]]:
+    """Load transactions from a CSV file."""
+    pass
+
+
+def monthly_summary(
+    transactions: list[dict[str, Any]],
+) -> dict[str, dict[str, int]]:
+    """Summarize transactions by month."""
+    pass
