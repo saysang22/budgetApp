@@ -10,8 +10,20 @@ def add_transaction(
     transactions: MutableSequence[dict[str, Any]],
     transaction: dict[str, Any],
 ) -> None:
-    """Add a transaction to the collection."""
-    pass
+    """Add a transaction to the collection.
+
+    The stored transaction keeps the expected budget fields only.
+    """
+    transactions.append(
+        {
+            "date": transaction["date"],
+            "type": transaction["type"],
+            "category": transaction["category"],
+            "description": transaction["description"],
+            "amount": transaction["amount"],
+            "memo": transaction["memo"],
+        }
+    )
 
 
 def get_balance(transactions: list[dict[str, Any]]) -> float:
