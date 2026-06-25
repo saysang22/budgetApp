@@ -1,4 +1,0 @@
-interface:
-  display_name: "CSV Ledger CLI"
-  short_description: "Rules and workflow for the CSV accounting CLI project"
-  default_prompt: "Use $csv-ledger-cli to work in the CSV-based accounting CLI project with TDD, type hints, low complexity, QA review, and commit discipline."
