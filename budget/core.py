@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from csv import DictReader
 from collections.abc import MutableSequence
+from pathlib import Path
 from typing import Any
 
 
@@ -53,7 +55,19 @@ def filter_by_category(
 
 def load_transactions_from_csv(path: str) -> list[dict[str, Any]]:
     """Load transactions from a CSV file."""
-    pass
+    csv_path = Path(path)
+    with csv_path.open("r", encoding="utf-8-sig", newline="") as csv_file:
+        return [
+            {
+                "date": row["date"],
+                "type": row["type"],
+                "category": row["category"],
+                "description": row["description"],
+                "amount": int(row["amount"]),
+                "memo": row["memo"],
+            }
+            for row in DictReader(csv_file)
+        ]
 
 
 def monthly_summary(

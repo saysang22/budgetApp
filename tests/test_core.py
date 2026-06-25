@@ -3,7 +3,12 @@
 from csv import DictReader
 from pathlib import Path
 
-from budget.core import add_transaction, filter_by_category, get_balance
+from budget.core import (
+    add_transaction,
+    filter_by_category,
+    get_balance,
+    load_transactions_from_csv,
+)
 
 
 def test_add_transaction_increases_length() -> None:
@@ -174,3 +179,21 @@ def test_filter_by_category_returns_independent_results() -> None:
     filtered[0]["description"] = "수정됨"
 
     assert transactions[0]["description"] == "생활용품"
+
+
+def test_load_transactions_from_csv_reads_step1_sample() -> None:
+    """CSV loading should parse step1 sample data correctly."""
+    csv_path = "data/step1_transactions.csv"
+
+    transactions = load_transactions_from_csv(csv_path)
+
+    assert len(transactions) == 10
+    assert transactions[0] == {
+        "date": "2026-01-05",
+        "type": "지출",
+        "category": "식비",
+        "description": "점심식사",
+        "amount": -12000,
+        "memo": "",
+    }
+    assert isinstance(transactions[0]["amount"], int)
