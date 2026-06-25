@@ -1,0 +1,6 @@
+interface:
+  display_name: "Budget App CLI"
+  short_description: "CSV budget app repo rules"
+  default_prompt: "Use $budget-app-cli to follow the budgetApp repository rules, TDD flow, and quality checks."
+policy:
+  allow_implicit_invocation: true

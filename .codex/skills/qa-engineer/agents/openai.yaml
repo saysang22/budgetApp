@@ -1,0 +1,6 @@
+interface:
+  display_name: "QA Engineer"
+  short_description: "Pre-commit quality review"
+  default_prompt: "Use $qa-engineer to review this budgetApp change for tests, type hints, and complexity before commit."
+policy:
+  allow_implicit_invocation: true
