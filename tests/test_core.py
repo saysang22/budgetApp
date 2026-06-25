@@ -8,6 +8,7 @@ from budget.core import (
     filter_by_category,
     get_balance,
     load_transactions_from_csv,
+    monthly_summary,
 )
 
 
@@ -197,3 +198,27 @@ def test_load_transactions_from_csv_reads_step1_sample() -> None:
         "memo": "",
     }
     assert isinstance(transactions[0]["amount"], int)
+
+
+def test_monthly_summary_groups_step3_sample_by_month() -> None:
+    """Monthly summary should aggregate step3 sample data correctly."""
+    transactions = load_transactions_from_csv("data/step3_transactions.csv")
+
+    summary = monthly_summary(transactions)
+
+    assert len(summary) == 15
+    assert summary["2025-01"] == {
+        "income": 405037,
+        "expense": -2886860,
+        "net": -2481823,
+    }
+    assert summary["2025-02"] == {
+        "income": 12940804,
+        "expense": -1832242,
+        "net": 11108562,
+    }
+    assert summary["2026-03"] == {
+        "income": 489857,
+        "expense": -3301374,
+        "net": -2811517,
+    }
