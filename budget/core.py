@@ -28,7 +28,7 @@ def add_transaction(
 
 def get_balance(transactions: list[dict[str, Any]]) -> float:
     """Return the net balance for all transactions."""
-    pass
+    return float(sum(transaction["amount"] for transaction in transactions))
 
 
 def filter_by_category(

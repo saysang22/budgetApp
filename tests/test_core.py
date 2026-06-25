@@ -1,6 +1,9 @@
 """Tests for budget.core."""
 
-from budget.core import add_transaction
+from csv import DictReader
+from pathlib import Path
+
+from budget.core import add_transaction, get_balance
 
 
 def test_add_transaction_increases_length() -> None:
@@ -69,3 +72,27 @@ def test_add_transaction_accepts_empty_description() -> None:
     add_transaction(transactions, transaction)
 
     assert transactions[0]["description"] == ""
+
+
+def test_get_balance_returns_zero_for_empty_list() -> None:
+    """An empty collection should have a zero balance."""
+    assert get_balance([]) == 0.0
+
+
+def test_get_balance_uses_sample_csv_amounts() -> None:
+    """Balance should match the total amount from step2 sample data."""
+    csv_path = Path("data/step2_transactions.csv")
+    with csv_path.open("r", encoding="utf-8-sig", newline="") as csv_file:
+        transactions = [
+            {
+                "date": row["date"],
+                "type": row["type"],
+                "category": row["category"],
+                "description": row["description"],
+                "amount": int(row["amount"]),
+                "memo": row["memo"],
+            }
+            for row in DictReader(csv_file)
+        ]
+
+    assert get_balance(transactions) == 24285027.0
