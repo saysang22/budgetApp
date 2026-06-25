@@ -36,7 +36,19 @@ def filter_by_category(
     category: str,
 ) -> list[dict[str, Any]]:
     """Return transactions that match the given category."""
-    pass
+    normalized_category = category.lower()
+    return [
+        {
+            "date": transaction["date"],
+            "type": transaction["type"],
+            "category": transaction["category"],
+            "description": transaction["description"],
+            "amount": transaction["amount"],
+            "memo": transaction["memo"],
+        }
+        for transaction in transactions
+        if transaction["category"].lower() == normalized_category
+    ]
 
 
 def load_transactions_from_csv(path: str) -> list[dict[str, Any]]:

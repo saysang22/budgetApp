@@ -3,7 +3,7 @@
 from csv import DictReader
 from pathlib import Path
 
-from budget.core import add_transaction, get_balance
+from budget.core import add_transaction, filter_by_category, get_balance
 
 
 def test_add_transaction_increases_length() -> None:
@@ -96,3 +96,81 @@ def test_get_balance_uses_sample_csv_amounts() -> None:
         ]
 
     assert get_balance(transactions) == 24285027.0
+
+
+def test_filter_by_category_matches_case_insensitively() -> None:
+    """Category matching should ignore case differences."""
+    transactions = [
+        {
+            "date": "2026-01-13",
+            "type": "지출",
+            "category": "쇼핑",
+            "description": "생활용품",
+            "amount": -326526,
+            "memo": "",
+        },
+        {
+            "date": "2026-02-05",
+            "type": "지출",
+            "category": "쇼핑",
+            "description": "옷 구입",
+            "amount": -63587,
+            "memo": "메모_5",
+        },
+        {
+            "date": "2026-01-05",
+            "type": "지출",
+            "category": "의료",
+            "description": "한의원",
+            "amount": -65990,
+            "memo": "카드결제",
+        },
+    ]
+
+    filtered = filter_by_category(transactions, "쇼핑")
+
+    assert len(filtered) == 2
+    assert all(transaction["category"] == "쇼핑" for transaction in filtered)
+
+
+def test_filter_by_category_returns_empty_list_for_missing_category() -> None:
+    """Unknown categories should return an empty list."""
+    transactions = [
+        {
+            "date": "2026-01-05",
+            "type": "지출",
+            "category": "의료",
+            "description": "한의원",
+            "amount": -65990,
+            "memo": "카드결제",
+        }
+    ]
+
+    assert filter_by_category(transactions, "없는카테고리") == []
+
+
+def test_filter_by_category_returns_independent_results() -> None:
+    """The result should not be tied to the original list object."""
+    transactions = [
+        {
+            "date": "2026-01-13",
+            "type": "지출",
+            "category": "쇼핑",
+            "description": "생활용품",
+            "amount": -326526,
+            "memo": "",
+        },
+        {
+            "date": "2026-01-05",
+            "type": "지출",
+            "category": "의료",
+            "description": "한의원",
+            "amount": -65990,
+            "memo": "카드결제",
+        },
+    ]
+
+    filtered = filter_by_category(transactions, "쇼핑")
+    filtered[0]["description"] = "수정됨"
+
+    assert transactions[0]["description"] == "생활용품"
